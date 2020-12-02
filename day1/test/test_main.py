@@ -1,8 +1,11 @@
+import os
 import logging
 
 from day1.code.main import process_input, get_number_group
 
 logger = logging.getLogger(__name__)
+
+local_path = os.path.abspath(os.path.dirname(__file__))
 
 
 def test_case_1():
@@ -28,7 +31,7 @@ def test_case_2():
 
 
 def test_input():
-    with open('input', 'r') as f:
+    with open(os.path.join(local_path, 'input'), 'r') as f:
         input_str = f.read()
         output = process_input(input_str)
         logger.info(f"Output: {output}")
@@ -37,7 +40,7 @@ def test_input():
 
 
 def test_input_with_three_components():
-    with open('input', 'r') as f:
+    with open(os.path.join(local_path, 'input'), 'r') as f:
         input_str = f.read()
         output = process_input(input_str, num_components=3)
         logger.info(f"Output: {output}")
