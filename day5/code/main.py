@@ -9,29 +9,8 @@ def decode_seat(seat):
         logger.error(f"Invalid seat code: {seat}")
         return -1
 
-    rows_interval = [0, 127]
-
-    for i in range(7):
-        interval_half_width = (rows_interval[1] - rows_interval[0] + 1) // 2
-
-        if seat[i] == 'F':
-            rows_interval[1] -= interval_half_width
-
-        elif seat[i] == 'B':
-            rows_interval[0] += interval_half_width
-
-    cols_interval = [0, 7]
-
-    for i in range(7, 7 + 3):
-        interval_half_width = (cols_interval[1] - cols_interval[0] + 1) // 2
-
-        if seat[i] == 'L':
-            cols_interval[1] -= interval_half_width
-
-        elif seat[i] == 'R':
-            cols_interval[0] += interval_half_width
-
-    return rows_interval[0] * 8 + cols_interval[0]
+    # The seat string can be converted to binary and parsed, and that's it! lol
+    return int(re.sub(r"[FL]", "0", re.sub(r"[BR]", "1", seat)), 2)
 
 
 def check_boarding_pass_list(bp_list):
