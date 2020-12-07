@@ -14,7 +14,21 @@ class BagNode:
     parents: set
 
 
-def clean_bag_name(bag_name):
+def clean_bag_name(bag_name: str) -> tuple:
+    """
+    Parses a string with a bag description and returns a tuple with the components
+    :param bag_name: a string describing a bag type
+    :return: a tuple with two elements: the bag count (or 1 if not specified) and the bag name
+
+    >>> clean_bag_name("dark red bags")
+    (1, 'dark red')
+    >>> clean_bag_name("2 dark violet bags")
+    (2, 'dark violet')
+    """
+
+    if bag_name.startswith("no other"):
+        return 0, None
+
     match = re.match(r'(\d*)\s*([a-z ]+?)\s*bags?', bag_name.strip())
 
     if not match:
@@ -23,14 +37,14 @@ def clean_bag_name(bag_name):
     bag_type = match.group(2)
     bag_count = 1 if not match.group(1) else int(match.group(1))
 
-    if bag_type.startswith("no other"):
-        bag_type = None
-        bag_count = 0
-
     return bag_count, bag_type
 
 
 def parse_bag_rules(in_str):
+    """
+    Parses a string with bag composition rules, creating a tree of BagNode items
+    """
+
     bag_nodes = {}
 
     rule_definitions = in_str.split(".\n")
@@ -60,9 +74,12 @@ def parse_bag_rules(in_str):
 
 
 def count_shiny_gold_bag_parents(in_str):
+    """
+    Counts the number of ancestors a shiny gold bag can have
+    """
+
     bag_nodes = parse_bag_rules(in_str)
 
-    # Count shiny gold parents
     current_node = bag_nodes['shiny gold']
 
     found_parents = set()
@@ -88,6 +105,10 @@ def count_shiny_gold_bag_parents(in_str):
 
 
 def count_bag_node_children(bag_nodes, bag_type):
+    """
+    Count how many bags a bag of type bag_type can hold
+    """
+
     children_count = 0
 
     for child, child_count in bag_nodes[bag_type].capacity.items():
@@ -97,5 +118,9 @@ def count_bag_node_children(bag_nodes, bag_type):
 
 
 def count_shiny_gold_bag_children(in_str):
+    """
+    Counts how many bags a shiny gold bag holds
+    """
+
     bag_nodes = parse_bag_rules(in_str)
     return count_bag_node_children(bag_nodes, 'shiny gold')
