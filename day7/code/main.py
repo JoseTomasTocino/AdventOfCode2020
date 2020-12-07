@@ -1,6 +1,5 @@
 import logging
 import re
-import sys
 from dataclasses import dataclass
 from pprint import pprint, pformat
 
@@ -31,7 +30,7 @@ def clean_bag_name(bag_name):
     return bag_count, bag_type
 
 
-def count_shiny_gold_bag_parents(in_str):
+def parse_bag_rules(in_str):
     bag_nodes = {}
 
     rule_definitions = in_str.split(".\n")
@@ -46,6 +45,9 @@ def count_shiny_gold_bag_parents(in_str):
         rule_content = [clean_bag_name(x) for x in rule_raw_content.split(",")]
         bag_capacity = {x[1]: x[0] for x in rule_content}
 
+        if None in bag_capacity:
+            bag_capacity = {}
+
         bag_nodes[rule_subject] = BagNode(name=rule_subject, capacity=bag_capacity, parents=set())
 
     # Compute parents
@@ -54,7 +56,11 @@ def count_shiny_gold_bag_parents(in_str):
             if bag_type in bag_nodes[bag_possible_parent].capacity:
                 bag_nodes[bag_type].parents.add(bag_possible_parent)
 
-    # pp(bag_nodes)
+    return bag_nodes
+
+
+def count_shiny_gold_bag_parents(in_str):
+    bag_nodes = parse_bag_rules(in_str)
 
     # Count shiny gold parents
     current_node = bag_nodes['shiny gold']
@@ -64,10 +70,6 @@ def count_shiny_gold_bag_parents(in_str):
     revised_nodes = set()
 
     while True:
-        # logger.info(f"{current_node=}")
-        # pp(found_parents)
-        # pp(potential_nodes)
-
         revised_nodes.add(current_node.name)
 
         for node in current_node.parents:
@@ -83,3 +85,17 @@ def count_shiny_gold_bag_parents(in_str):
         current_node = bag_nodes[potential_nodes.pop()]
 
     return len(found_parents)
+
+
+def count_bag_node_children(bag_nodes, bag_type):
+    children_count = 0
+
+    for child, child_count in bag_nodes[bag_type].capacity.items():
+        children_count += child_count + child_count * count_bag_node_children(bag_nodes, child)
+
+    return children_count
+
+
+def count_shiny_gold_bag_children(in_str):
+    bag_nodes = parse_bag_rules(in_str)
+    return count_bag_node_children(bag_nodes, 'shiny gold')
