@@ -32,7 +32,6 @@ def find_bad_number(inp, preamble_size):
         preamble_end += 1
 
 
-
 def find_contiguous_sum_set(inp, target_number):
     numbers = [int(x) for x in inp.split("\n")]
     number_count = len(numbers)
@@ -42,10 +41,9 @@ def find_contiguous_sum_set(inp, target_number):
 
         # Keep increasing the window size until the size limit is reached or the sum equals the target number
         while i + set_size < number_count:
-            if sum(numbers[i:i + set_size - 1]) == target_number:
-                return numbers[i:i + set_size - 1]
+            if sum(numbers[i : i + set_size - 1]) == target_number:
+                return numbers[i : i + set_size - 1]
 
             set_size += 1
 
     return None
-

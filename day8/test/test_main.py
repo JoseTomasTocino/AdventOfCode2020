@@ -23,7 +23,7 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert verify_boot_code(content) == (1867, True)
         assert fix_boot_code(content) == 1303

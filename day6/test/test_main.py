@@ -29,10 +29,12 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert count_questions_anyone(content) == 6387
         assert count_questions_everyone(content) == 3039
+
+
 #
 #
 # def test_find_my_seat():

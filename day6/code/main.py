@@ -9,4 +9,9 @@ def count_questions_anyone(in_str):
 
 
 def count_questions_everyone(in_str):
-    return sum([len(set.intersection(*[set(x) for x in group.split("\n")])) for group in in_str.split("\n\n")])
+    return sum(
+        [
+            len(set.intersection(*[set(x) for x in group.split("\n")]))
+            for group in in_str.split("\n\n")
+        ]
+    )

@@ -17,12 +17,12 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         highest_bp_id = max(check_boarding_pass_list(f.read()))
         assert highest_bp_id == 976
 
 
 def test_find_my_seat():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         my_seat = find_my_seat(f.read())
         assert my_seat == 685

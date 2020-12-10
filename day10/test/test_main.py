@@ -68,7 +68,7 @@ def test_sample_input_2():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
 
         differences = get_adapter_differences(content)

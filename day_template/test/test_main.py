@@ -12,5 +12,5 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         f.read()

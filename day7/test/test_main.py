@@ -1,7 +1,11 @@
 import logging
 import os.path
 
-from day7.code.main import count_shiny_gold_bag_parents, clean_bag_name, count_shiny_gold_bag_children
+from day7.code.main import (
+    count_shiny_gold_bag_parents,
+    clean_bag_name,
+    count_shiny_gold_bag_children,
+)
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))
@@ -39,7 +43,7 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert count_shiny_gold_bag_parents(content) == 259
         assert count_shiny_gold_bag_children(content) == 45018

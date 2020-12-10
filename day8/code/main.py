@@ -32,14 +32,14 @@ def verify_boot_code(boot_code):
 
         instruction_type, instruction_argument = instructions[current_instruction_index]
 
-        if instruction_type == 'nop':
+        if instruction_type == "nop":
             current_instruction_index += 1
 
-        elif instruction_type == 'acc':
+        elif instruction_type == "acc":
             accumulator += int(instruction_argument)
             current_instruction_index += 1
 
-        elif instruction_type == 'jmp':
+        elif instruction_type == "jmp":
             current_instruction_index += int(instruction_argument)
 
     return accumulator, is_infinite
@@ -57,15 +57,19 @@ def fix_boot_code(boot_code):
     for i, instruction in enumerate(instructions):
 
         # Don't modify 'acc' instructions
-        if instruction[0] == 'acc':
+        if instruction[0] == "acc":
             continue
 
         # Make a copy of the program, morphing the i-th instruction
         modified_instructions = copy.deepcopy(instructions)
-        modified_instructions[i][0] = 'jmp' if modified_instructions[i][0] == 'nop' else 'nop'
+        modified_instructions[i][0] = (
+            "jmp" if modified_instructions[i][0] == "nop" else "nop"
+        )
 
         # Check if the modified program runs infinitely
-        acc, is_infinite = verify_boot_code('\n'.join([' '.join(x) for x in modified_instructions]))
+        acc, is_infinite = verify_boot_code(
+            "\n".join([" ".join(x) for x in modified_instructions])
+        )
 
         if not is_infinite:
             return acc

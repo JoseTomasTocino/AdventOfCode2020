@@ -68,11 +68,11 @@ def test_sample_input_2():
 50"""
     preamble_size = 25
 
-    assert find_bad_number(inp1, preamble_size) == 100    
+    assert find_bad_number(inp1, preamble_size) == 100
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert find_bad_number(content, 25) == 1038347917
 

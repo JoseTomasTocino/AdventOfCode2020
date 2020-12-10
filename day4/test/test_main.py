@@ -54,31 +54,31 @@ def test_sample_input():
 
 
 def test_big_input():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         valid_passports = validate_passports(f.read())
         assert valid_passports == 233
         logger.info(f"Valid passports: {valid_passports}")
 
 
 def test_validate_fields():
-    assert validate_field('byr', '2002')
-    assert validate_field('byr', '2003') is False
+    assert validate_field("byr", "2002")
+    assert validate_field("byr", "2003") is False
 
-    assert validate_field('hgt', '60in')
-    assert validate_field('hgt', '190cm')
+    assert validate_field("hgt", "60in")
+    assert validate_field("hgt", "190cm")
 
-    assert validate_field('hgt', '190in') is False
-    assert validate_field('hgt', '190') is False
+    assert validate_field("hgt", "190in") is False
+    assert validate_field("hgt", "190") is False
 
-    assert validate_field('hcl', '#123abc')
-    assert validate_field('hcl', '#123abz') is False
-    assert validate_field('hcl', '123abc') is False
+    assert validate_field("hcl", "#123abc")
+    assert validate_field("hcl", "#123abz") is False
+    assert validate_field("hcl", "123abc") is False
 
-    assert validate_field('ecl', 'brn')
-    assert validate_field('ecl', 'wat') is False
+    assert validate_field("ecl", "brn")
+    assert validate_field("ecl", "wat") is False
 
-    assert validate_field('pid', '000000001')
-    assert validate_field('pid', '0123456789') is False
+    assert validate_field("pid", "000000001")
+    assert validate_field("pid", "0123456789") is False
 
 
 def test_validate_passports_with_valid_fields():
@@ -90,7 +90,7 @@ def test_validate_passports_with_invalid_fields():
 
 
 def test_big_input_checking_fields():
-    with open(os.path.join(local_path, "input"), 'r') as f:
+    with open(os.path.join(local_path, "input"), "r") as f:
         valid_passports = validate_passports(f.read(), check_fields=True)
         assert valid_passports == 111
         logger.info(f"Valid passports: {valid_passports}")

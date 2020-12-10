@@ -29,7 +29,7 @@ def clean_bag_name(bag_name: str) -> tuple:
     if bag_name.startswith("no other"):
         return 0, None
 
-    match = re.match(r'(\d*)\s*([a-z ]+?)\s*bags?', bag_name.strip())
+    match = re.match(r"(\d*)\s*([a-z ]+?)\s*bags?", bag_name.strip())
 
     if not match:
         return 0, None
@@ -62,7 +62,9 @@ def parse_bag_rules(in_str):
         if None in bag_capacity:
             bag_capacity = {}
 
-        bag_nodes[rule_subject] = BagNode(name=rule_subject, capacity=bag_capacity, parents=set())
+        bag_nodes[rule_subject] = BagNode(
+            name=rule_subject, capacity=bag_capacity, parents=set()
+        )
 
     # Compute parents
     for bag_type in bag_nodes:
@@ -80,7 +82,7 @@ def count_shiny_gold_bag_parents(in_str):
 
     bag_nodes = parse_bag_rules(in_str)
 
-    current_node = bag_nodes['shiny gold']
+    current_node = bag_nodes["shiny gold"]
 
     found_parents = set()
     potential_nodes = set()
@@ -112,7 +114,9 @@ def count_bag_node_children(bag_nodes, bag_type):
     children_count = 0
 
     for child, child_count in bag_nodes[bag_type].capacity.items():
-        children_count += child_count + child_count * count_bag_node_children(bag_nodes, child)
+        children_count += child_count + child_count * count_bag_node_children(
+            bag_nodes, child
+        )
 
     return children_count
 
@@ -123,4 +127,4 @@ def count_shiny_gold_bag_children(in_str):
     """
 
     bag_nodes = parse_bag_rules(in_str)
-    return count_bag_node_children(bag_nodes, 'shiny gold')
+    return count_bag_node_children(bag_nodes, "shiny gold")

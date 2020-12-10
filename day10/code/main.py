@@ -36,4 +36,8 @@ def get_adapter_path_count_priv(adapters, current=0):
         return 1
 
     # Otherwise, sum all branches from matching adapters (according to <= 3 criteria)
-    return sum(get_adapter_path_count_priv(adapters, i) for i in next_indices if adapters[i] - adapters[current] <= 3)
+    return sum(
+        get_adapter_path_count_priv(adapters, i)
+        for i in next_indices
+        if adapters[i] - adapters[current] <= 3
+    )

@@ -14,7 +14,7 @@ def decode_seat(seat):
 
 
 def check_boarding_pass_list(bp_list):
-    return [decode_seat(seat) for seat in bp_list.split('\n') if seat.strip()]
+    return [decode_seat(seat) for seat in bp_list.split("\n") if seat.strip()]
 
 
 def find_my_seat(bp_list):

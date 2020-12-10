@@ -10,7 +10,7 @@ def get_number_group(numbers, num_components=1):
         if num_components == 1:
             yield [n]
         else:
-            for subgroup in get_number_group(numbers[i + 1:], num_components - 1):
+            for subgroup in get_number_group(numbers[i + 1 :], num_components - 1):
                 yield [n] + subgroup
 
 

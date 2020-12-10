@@ -10,7 +10,7 @@ def get_map_cell(map_template, row, column):
     return map_template[row][column]
 
 
-def traverse_map(map_string, slope=[1,3]):
+def traverse_map(map_string, slope=[1, 3]):
     map_template = map_string.split("\n")
     num_rows = len(map_template)
 
@@ -20,7 +20,7 @@ def traverse_map(map_string, slope=[1,3]):
     while current_position[0] < num_rows:
         cell_type = get_map_cell(map_template, *current_position)
 
-        if cell_type == '#':
+        if cell_type == "#":
             num_trees += 1
 
         current_position[0] += slope[0]
