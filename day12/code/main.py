@@ -17,20 +17,14 @@ def get_ship_distance_from_start(inp):
     position = [0, 0]
     orientation = 0  # East
 
+    # First value of the tuple is the coordinate to modify, second value is the factor to multiply by
+    basic_actions = {'N': (1, 1), 'S': (1, -1), 'E': (0, 1), 'W': (0, -1)}
+
     for action, value in instructions:
         logger.debug(f"Action = {action}, value = {value}, current position = {position}, orientation = {orientation}")
 
-        if action == 'N':
-            position[1] += value
-
-        elif action == 'S':
-            position[1] -= value
-
-        elif action == 'E':
-            position[0] += value
-
-        elif action == 'W':
-            position[0] -= value
+        if action in basic_actions:
+            position[basic_actions[action][0]] += value * basic_actions[action][1]
 
         elif action == 'L':
             orientation = normalize_angle(orientation + value)
@@ -51,20 +45,13 @@ def get_ship_distance_with_waypoint(inp):
     position = [0, 0]
     waypoint = [10, 1]
 
+    basic_actions = {'N': (1, 1), 'S': (1, -1), 'E': (0, 1), 'W': (0, -1)}
+
     for action, value in instructions:
         logger.debug(f"Action = {action}, value = {value}, position = {position}, waypoint = {waypoint}")
 
-        if action == 'N':
-            waypoint[1] += value
-
-        elif action == 'S':
-            waypoint[1] -= value
-
-        elif action == 'E':
-            waypoint[0] += value
-
-        elif action == 'W':
-            waypoint[0] -= value
+        if action in basic_actions:
+            waypoint[basic_actions[action][0]] += value * basic_actions[action][1]
 
         elif action == 'R':
             value = normalize_angle(value)
