@@ -11,6 +11,7 @@ def test_sample_input():
     pass
 
 
-def test_big_input():
+def test_big_input(caplog):
+    caplog.set_level(logging.INFO)
     with open(os.path.join(local_path, "input"), "r") as f:
-        f.read()
+        content = f.read()
