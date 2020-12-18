@@ -7,7 +7,8 @@ local_path = os.path.abspath(os.path.dirname(__file__))
 sample_input = None
 
 
-def test_sample_input():
+def test_sample_input(caplog):
+    caplog.set_level(logging.INFO)
     pass
 
 
