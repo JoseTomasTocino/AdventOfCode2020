@@ -34,7 +34,7 @@ def test_medium_input(caplog):
     with open(os.path.join(local_path, "medium_input"), "r") as f:
         content = f.read()
 
-        # assert count_valid_messages(content, consider_loopin_rules=False) == 3
+        assert count_valid_messages(content, consider_loopin_rules=False) == 3
         assert count_valid_messages(content, consider_loopin_rules=True) == 12
 
 
@@ -43,4 +43,5 @@ def test_big_input(caplog):
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
 
-        assert count_valid_messages(content) == 10
+        assert count_valid_messages(content, consider_loopin_rules=False) == 118
+        assert count_valid_messages(content, consider_loopin_rules=True) == 246
