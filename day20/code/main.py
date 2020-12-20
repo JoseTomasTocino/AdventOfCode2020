@@ -81,64 +81,62 @@ class Tile:
     def similar_to(self, other):
         return self.id.split("_")[0] == other.id.split("_")[0]
 
+    def get_variations(self):
+        variations = []
+
+        tile_t = deepcopy(self)
+        tile_t.id = self.id + "_t"
+        tile_t.transpose()
+        variations.append(tile_t)
+
+        for i in range(3):
+            tile_r = deepcopy(self)
+            tile_r.rotate(i + 1)
+            tile_r.id = f"{self.id}_{90 * (i + 1)}"
+
+            tile_rt = deepcopy(tile_t)
+            tile_rt.rotate(i + 1)
+            tile_rt.id = f"{tile_t.id}_{90 * (i + 1)}"
+
+            variations.append(tile_r)
+            variations.append(tile_rt)
+
+        return variations
+
 
 def generate_arrangement(tileset, width, so_far=None, depth=0):
     # Init container
     if so_far is None:
         so_far = []
 
-    logger.info(f"[DEPTH={depth}] {'    ' * depth}Generating arrangements, {width=} so_far = {[x.id for x in so_far]}")
-
-    # If arrangement is complete, return it (yield?)
+    # Cache arrangement length
     len_so_far = len(so_far)
+
+    # If arrangement is complete, return it
     if len_so_far == width * width:
-        logger.info(f"[DEPTH={depth}] {'    ' * depth}BASE CASE")
         return so_far
 
     row = len_so_far // width
     col = len_so_far % width
 
-    logger.info(f"[DEPTH={depth}] {'    ' * depth}   Current {row=}, {col=}")
-
+    # Initially, the entire tileset is potentially usable
     potential_tiles = tileset
 
     # If not at topmost row, filter by valid bottom neighbors
     if row > 0:
         top_neighbor = so_far[(row - 1) * width + col]
-        logger.info(f"[DEPTH={depth}] {'    ' * depth}   Has top neighbor: {top_neighbor.id}")
         potential_tiles = [x for x in potential_tiles if not x.similar_to(top_neighbor) and x.bottom_of(top_neighbor)]
 
     # If not at leftmost col, filter by valid right neighbors
     if col > 0:
         left_neighbor = so_far[len_so_far - 1]
-        logger.info(f"[DEPTH={depth}] {'    ' * depth}   Has left neighbor: {left_neighbor.id}")
         potential_tiles = [x for x in potential_tiles if not x.similar_to(left_neighbor) and x.right_of(left_neighbor)]
-
-    # # First cell, the entire tileset is possible
-    # if row == 0 and col == 0:
-    #     potential_tiles = tileset
-    #
-    # # If not at topmost row, add top neighbor
-    # if row > 0:
-    #     top_neighbor = so_far[len_so_far - 1 - width]
-    #     logger.info(f"[DEPTH={depth}] {'    ' * depth}   Has top neighbor: {top_neighbor.id}")
-    #     potential_tiles += [x for x in tileset if not x.similar_to(top_neighbor) and x.bottom_of(top_neighbor)]
-    #
-    # # If not at leftmost col, add left neighbor
-    # if col > 0:
-    #     left_neighbor = so_far[len_so_far - 1]
-    #     logger.info(f"[DEPTH={depth}] {'    ' * depth}   Has left neighbor: {left_neighbor.id}")
-    #     potential_tiles += [x for x in tileset if not x.similar_to(left_neighbor) and x.right_of(left_neighbor)]
-
-    logger.info(
-        f"[DEPTH={depth}] {'    ' * depth}   Found {len(potential_tiles)} potential tiles: {[x.id for x in potential_tiles]}")
 
     if not potential_tiles:
         return None
 
+    # Recurse with each potential tile
     for potential in potential_tiles:
-        logger.info(f"[DEPTH={depth}] {'    ' * depth}   Trying potential: {potential.id}")
-        # logger.info(potential)
         res = generate_arrangement(tileset, width, so_far + [potential], depth=depth + 1)
         if res:
             return res
@@ -146,55 +144,91 @@ def generate_arrangement(tileset, width, so_far=None, depth=0):
 
 def rearrange_tiles(inp):
     tiles_raw = inp.split("\n\n")
-    corner_tiles = []
     tileset = []
 
+    # Parse input and generate initial tileset
     for tile_raw in tiles_raw:
         tile_raw = tile_raw.split("\n")
+
         id = re.search(r'\d+', tile_raw[0]).group(0)
         content = [list(x) for x in tile_raw[1:] if x]
 
         tile = Tile(id=id, content=content)
         tileset.append(tile)
 
+    # Useful variables throughout
     original_tile_count = len(tileset)
     width = int(math.sqrt(original_tile_count))
-    tile_width = len(tileset[0].content[0])
 
-    logger.info(f"Found {original_tile_count} tiles, matrix: {width}x{width}, tile width: {tile_width}")
-
-    # Add rotations and flips
+    # Add rotations and flips of each tile
     for tile in tileset[:]:
-        tile_t = deepcopy(tile)
-        tile_t.id = tile.id + "_t"
-        tile_t.transpose()
-        tileset.append(tile_t)
+        tileset += tile.get_variations()
 
-        for i in range(3):
-            tile_r = deepcopy(tile)
-            tile_r.rotate(i + 1)
-            tile_r.id = f"{tile.id}_{90 * (i + 1)}"
+    # Find the correct arrrangement
+    arrangement = generate_arrangement(tileset, width)
 
-            tile_rt = deepcopy(tile_t)
-            tile_rt.rotate(i + 1)
-            tile_rt.id = f"{tile_t.id}_{90 * (i + 1)}"
-
-            tileset.append(tile_r)
-            tileset.append(tile_rt)
-
-    comb = generate_arrangement(tileset, width)
-
-    logger.info([x.id for x in comb])
-
-    for i in range(0, width * width, width):
-        for j in range(tile_width):
-            logger.info(' '.join(''.join(t.content[j]) for t in comb[i:i + width]))
-        logger.info("")
-
-    return comb
+    return arrangement
 
 
 def multiply_corners(arrangement):
     width = int(math.sqrt(len(arrangement)))
 
     return arrangement[0] * arrangement[width - 1] * arrangement[width * width - width] * arrangement[width * width - 1]
+
+
+def analyze_water_roughness(tileset):
+    # Calculate some useful variables
+    width = int(math.sqrt(len(tileset)))
+    tile_width = len(tileset[0].content[0])
+
+    # Make sure to remove the borders of each tile
+    image_lines = []
+    for i in range(0, width * width, width):
+        for j in range(1, tile_width - 1):
+            image_lines.append(list(''.join(''.join(t.content[j][1:-1]) for t in tileset[i:i + width])))
+
+    # Use the Tile class to easily generate the variations
+    image_tile = Tile(id='Image', content=image_lines)
+    images = [image_tile] + image_tile.get_variations()
+
+    monster = [
+        '                  #',
+        '#    ##    ##    ###',
+        ' #  #  #  #  #  #']
+
+    # Convert monster lines to regexp by replace spaces with dots
+    monster = [x.replace(' ', '.') for x in monster]
+
+    # Try each variation of the image
+    for image in images:
+        image_lines = [''.join(x) for x in image.content]
+
+        matches = []
+
+        # Find middle line, then check lines above and below
+        for i, image_line in enumerate(image_lines):
+
+            # Ignore first and last lines
+            if i == 0 or i == len(image_lines) - 1:
+                continue
+
+            # Match monster's middle line
+            for match in re.finditer(monster[1], image_line):
+                # Check line above
+                prev_line_chunk = image_lines[i - 1][match.start():]
+                if not re.match("^" + monster[0], prev_line_chunk):
+                    continue
+
+                # Check line below
+                next_line_chunk = image_lines[i + 1][match.start():]
+                if not re.match("^" + monster[2], next_line_chunk):
+                    continue
+
+                matches.append(i - 1)
+
+        if matches:
+            # Count total hashes, subtract hashes from matched sea monsters
+            total_hashes = ''.join(image_lines).count('#')
+            monster_hashes = ''.join(monster).count('#')
+
+            return total_hashes - len(matches) * monster_hashes
