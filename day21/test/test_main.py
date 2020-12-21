@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day21.code.main import count_ingredients_without_allergens
+from day21.code.main import count_ingredients_without_allergens, get_canonical_dangerous_ingredients
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))
@@ -15,6 +15,7 @@ sqjhc mxmxvkd sbzzf (contains fish)"""
 def test_sample_input(caplog):
     caplog.set_level(logging.INFO)
     assert count_ingredients_without_allergens(sample_input) == 5
+    assert get_canonical_dangerous_ingredients(sample_input) == 'mxmxvkd,sqjhc,fvjkl'
 
 
 def test_big_input(caplog):
@@ -23,3 +24,4 @@ def test_big_input(caplog):
         content = f.read()
 
         assert count_ingredients_without_allergens(content) == 2282
+        assert get_canonical_dangerous_ingredients(content) == 'vrzkz,zjsh,hphcb,mbdksj,vzzxl,ctmzsr,rkzqs,zmhnj'

@@ -27,7 +27,7 @@ def execute_allergen_rules(allergen_rules, depth=0):
     # If there are no more rules to apply
     if not allergen_rules:
         logger.info(f"[DEPTH={depth}]{'    ' * depth} Base case (rules len={len(curr_allergen)})")
-        return [curr_rules.pop()]
+        return [(curr_allergen, curr_rules.pop())]
 
     for possible_ingredient in curr_rules:
         logger.info(f"[DEPTH={depth}]{'    ' * depth} Considering ingredient: {possible_ingredient}")
@@ -47,12 +47,12 @@ def execute_allergen_rules(allergen_rules, depth=0):
             continue
 
         else:
-            return [possible_ingredient] + retval
+            return [(curr_allergen, possible_ingredient)] + retval
 
     return None
 
 
-def count_ingredients_without_allergens(inp):
+def process_allergens(inp):
     ingredients_global = set()
     allergens_global = set()
     foods = []
@@ -87,10 +87,23 @@ def count_ingredients_without_allergens(inp):
     logger.info("--")
 
     ingredients_with_allergens = execute_allergen_rules(allergen_rules)
-    ingredients_without_allergens = ingredients_global.difference(ingredients_with_allergens)
+    ingredients_without_allergens = ingredients_global.difference(set(x[1] for x in ingredients_with_allergens))
 
     logger.info(f"Ingredients with allergens: {ingredients_with_allergens}")
     logger.info(f"Ingredients without allergens: {ingredients_without_allergens}")
 
+    return ingredients_with_allergens, ingredients_without_allergens, foods
+
+
+def count_ingredients_without_allergens(inp):
+    ingredients_with_allergens, ingredients_without_allergens, foods = process_allergens(inp)
+
     return sum(1 for food_ingredients, _ in foods for ingredient in ingredients_without_allergens if
                ingredient in food_ingredients)
+
+
+def get_canonical_dangerous_ingredients(inp):
+    ingredients_with_allergens, _, _ = process_allergens(inp)
+
+    sorted_ingredients = list(x[1] for x in sorted(ingredients_with_allergens, key=lambda x: x[0]))
+    return ','.join(sorted_ingredients)
