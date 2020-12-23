@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day6.code.main import count_questions_anyone, count_questions_everyone
+from day06.code.main import count_questions_anyone, count_questions_everyone
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))

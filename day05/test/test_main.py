@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day5.code.main import decode_seat, check_boarding_pass_list, find_my_seat
+from day05.code.main import decode_seat, check_boarding_pass_list, find_my_seat
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))

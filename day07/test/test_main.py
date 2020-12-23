@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day7.code.main import (
+from day07.code.main import (
     count_shiny_gold_bag_parents,
     clean_bag_name,
     count_shiny_gold_bag_children,

@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day2.code.main import check_password_list, check_password_list_with_new_policy
+from day02.code.main import check_password_list, check_password_list_with_new_policy
 
 logger = logging.getLogger(__name__)
 

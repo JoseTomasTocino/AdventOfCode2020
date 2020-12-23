@@ -1,7 +1,7 @@
 import logging
 import os
 
-from day1.code.main import process_input, get_number_group
+from day01.code.main import process_input, get_number_group
 
 logger = logging.getLogger(__name__)
 

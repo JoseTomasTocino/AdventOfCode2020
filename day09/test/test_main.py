@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day9.code.main import find_bad_number, find_contiguous_sum_set
+from day09.code.main import find_bad_number, find_contiguous_sum_set
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))

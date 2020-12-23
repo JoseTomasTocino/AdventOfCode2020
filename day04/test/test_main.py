@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day4.code.main import validate_passports, validate_field
+from day04.code.main import validate_passports, validate_field
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))

@@ -1,7 +1,7 @@
 import logging
 import os.path
 
-from day8.code.main import verify_boot_code, fix_boot_code
+from day08.code.main import verify_boot_code, fix_boot_code
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))
