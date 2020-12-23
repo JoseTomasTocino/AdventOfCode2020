@@ -1,7 +1,7 @@
 import logging
 import re
 from dataclasses import dataclass
-from pprint import pprint, pformat
+from pprint import pformat
 
 logger = logging.getLogger(__name__)
 pp = lambda x: logger.info(pformat(x))

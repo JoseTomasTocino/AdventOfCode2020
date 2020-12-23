@@ -1,6 +1,6 @@
 import functools
-import operator
 import logging
+import operator
 
 logger = logging.getLogger(__name__)
 

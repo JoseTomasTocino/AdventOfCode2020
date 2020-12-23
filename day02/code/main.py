@@ -1,6 +1,5 @@
-import re
 import logging
-from collections import Counter
+import re
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 
 from day1.code.main import process_input, get_number_group
 

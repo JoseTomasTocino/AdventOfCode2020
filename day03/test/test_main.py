@@ -1,6 +1,7 @@
-from day3.code.main import traverse_map, get_map_cell, traverse_map_multiple_slopes
-import os.path
 import logging
+import os.path
+
+from day3.code.main import traverse_map, get_map_cell, traverse_map_multiple_slopes
 
 logger = logging.getLogger(__name__)
 local_path = os.path.abspath(os.path.dirname(__file__))
