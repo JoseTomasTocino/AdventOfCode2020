@@ -48,4 +48,4 @@ def test_big_input(caplog):
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert count_black_tiles(content) == 232
-        assert count_black_tiles(content, run_art_exhibit=True) == 232
+        assert count_black_tiles(content, run_art_exhibit=True) == 3519
