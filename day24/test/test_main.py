@@ -38,8 +38,9 @@ def test_follow_directions(caplog):
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
     assert count_black_tiles(sample_input) == 10
+    caplog.set_level(logging.INFO)
+    assert count_black_tiles(sample_input, run_art_exhibit=True) == 2208
 
 
 def test_big_input(caplog):
@@ -47,3 +48,4 @@ def test_big_input(caplog):
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
         assert count_black_tiles(content) == 232
+        assert count_black_tiles(content, run_art_exhibit=True) == 232

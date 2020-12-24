@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -51,8 +52,16 @@ def follow_directions(directions, initial=(0, 0, 0)):
     return initial
 
 
-def count_black_tiles(inp):
+def neighbors(tile):
+    x, y, z = tile
+    deltas = [(1, 0, -1), (1, -1, 0), (0, -1, 1), (-1, 0, 1), (-1, 1, 0), (0, 1, -1)]
+
+    return [(x + dx, y + dy, z + dz) for dx, dy, dz in deltas]
+
+
+def count_black_tiles(inp, run_art_exhibit=False):
     tiles = {}
+
     for case in inp.split("\n"):
         directions = parse_directions_string(case)
         final_position = follow_directions(directions)
@@ -63,5 +72,36 @@ def count_black_tiles(inp):
         else:
             logger.info(f"Flipping tile {final_position}")
             tiles[final_position] = TileColor.Black
+
+    if run_art_exhibit:
+        # Every day, the tiles are all flipped according to the following rules:
+        #
+        # Any black tile with zero or more than 2 black tiles immediately adjacent to it is flipped to white.
+        # Any white tile with exactly 2 black tiles immediately adjacent to it is flipped to black.
+
+        for i in range(100):
+            # Add surrounding border neighbors to tile map
+            for tile in list(tiles.keys()):
+                for neighbor in neighbors(tile):
+                    if neighbor not in tiles:
+                        tiles[neighbor] = TileColor.White
+
+            ntiles = deepcopy(tiles)
+
+            for tile, tile_color in tiles.items():
+                count_black_neighbors = 0
+
+                for neighbor in neighbors(tile):
+                    if neighbor in tiles and tiles[neighbor] == TileColor.Black:
+                        count_black_neighbors += 1
+
+                if tile_color == TileColor.Black and (count_black_neighbors == 0 or count_black_neighbors > 2):
+                    ntiles[tile] = TileColor.White
+
+                elif tile_color == TileColor.White and count_black_neighbors == 2:
+                    ntiles[tile] = TileColor.Black
+
+            tiles = ntiles
+            logger.info(f"Day {i}: {sum(x.value for x in tiles.values())}")
 
     return sum(x.value for x in tiles.values())
