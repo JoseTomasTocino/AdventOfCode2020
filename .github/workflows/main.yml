@@ -34,10 +34,17 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipenv wheel
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pipenv-
+
       - name: Install dependencies
         run: |
           pipenv install
 
       - name: Test with pytest
         run: |
-          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          pipenv run pytest pytest
