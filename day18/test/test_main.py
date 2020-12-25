@@ -10,7 +10,7 @@ sample_input = None
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     assert evaluate_expression("1 + 2 * 3 + 4 * 5 + 6") == 71
     assert evaluate_expression("1 + (2 * 3) + (4 * (5 + 6))") == 51
@@ -21,7 +21,7 @@ def test_sample_input(caplog):
 
 
 def test_sample_input_with_advanced_priorities(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     assert evaluate_expression("1 + 2 * 3 + 4 * 5 + 6", use_advanced_precedence=True) == 231
     assert evaluate_expression("1 + (2 * 3) + (4 * (5 + 6))", use_advanced_precedence=True) == 51

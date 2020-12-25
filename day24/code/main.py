@@ -1,9 +1,7 @@
 import logging
 from copy import deepcopy
-from enum import Enum
-from .tile import TileColor, Direction
 
-from day24.code.interface import render_tileset
+from .tile import TileColor, Direction
 
 logger = logging.getLogger(__name__)
 
@@ -95,11 +93,13 @@ def count_black_tiles(inp, run_art_exhibit=False):
         else:
             tiles[final_position] = TileColor.Black
 
-    if run_art_exhibit:
-        modified_tiles = None
-        for i in range(100):
-            tiles, modified_tiles = step_tileset(tiles, modified_tiles)
+    return tiles, sum(x.value for x in tiles.values())
 
-            # render_tileset(tiles)
 
-    return sum(x.value for x in tiles.values())
+def run_art_exhibit(tiles):
+    modified_tiles = None
+
+    for i in range(100):
+        tiles, modified_tiles = step_tileset(tiles, modified_tiles)
+
+    return tiles, sum(x.value for x in tiles.values())

@@ -18,14 +18,14 @@ def test_parse_instructions():
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.DEBUG)
+    # caplog.set_level(logging.DEBUG)
 
     assert get_ship_distance_from_start(inp) == 25
     assert get_ship_distance_with_waypoint(inp) == 286
 
 
 def test_big_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()

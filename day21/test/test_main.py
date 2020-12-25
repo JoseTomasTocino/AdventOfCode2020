@@ -13,13 +13,13 @@ sqjhc mxmxvkd sbzzf (contains fish)"""
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
     assert count_ingredients_without_allergens(sample_input) == 5
     assert get_canonical_dangerous_ingredients(sample_input) == 'mxmxvkd,sqjhc,fvjkl'
 
 
 def test_big_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
 

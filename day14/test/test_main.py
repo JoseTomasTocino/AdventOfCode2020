@@ -13,12 +13,12 @@ mem[8] = 0"""
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
     assert sum_memory_values(sample_input) == 165
 
 
 def test_sample_input_v2(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     inp = """mask = 000000000000000000000000000000X1001X
 mem[42] = 100

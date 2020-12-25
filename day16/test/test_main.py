@@ -8,7 +8,7 @@ local_path = os.path.abspath(os.path.dirname(__file__))
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     sample_input = """class: 1-3 or 5-7
 row: 6-11 or 33-44
@@ -26,7 +26,7 @@ nearby tickets:
 
 
 def test_get_matching_rules(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     rules = {'rule a': ((2, 5), (10, 15)), 'rule b': ((0, 1), (4, 8))}
 
@@ -37,7 +37,7 @@ def test_get_matching_rules(caplog):
 
 
 def test_big_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()

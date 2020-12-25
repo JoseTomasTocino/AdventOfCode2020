@@ -10,7 +10,7 @@ sample_input = None
 
 
 def test_sample_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     inp = """0: 4 1 5
 1: 2 3 | 3 2
@@ -29,7 +29,7 @@ aaaabbb"""
 
 
 def test_medium_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
 
     with open(os.path.join(local_path, "medium_input"), "r") as f:
         content = f.read()
@@ -39,7 +39,7 @@ def test_medium_input(caplog):
 
 
 def test_big_input(caplog):
-    caplog.set_level(logging.INFO)
+    # caplog.set_level(logging.INFO)
     with open(os.path.join(local_path, "input"), "r") as f:
         content = f.read()
 

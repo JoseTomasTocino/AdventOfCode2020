@@ -1,11 +1,17 @@
 import math
 import logging
+import os
+
+from day24.code.main import count_black_tiles, step_tileset
 from day24.code.tile import TileColor, Direction
 import pygame
 from pygame import gfxdraw
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+local_path = os.path.abspath(os.path.dirname(__file__))
+test_path = os.path.join(local_path, '..', 'test')
 
 
 def get_hexagon_coordinates(center, radius):
@@ -41,35 +47,43 @@ def cube_to_offset(pos):
     return col, row
 
 
-def render_tileset(tiles):
+def render():
     win_size = (800, 800)
     center = (win_size[0] // 2, win_size[1] // 2)
     margin = 50
-
-    converted_positions = [cube_to_offset(x) for x in tiles.keys()]
-
-    min_col = min(x[0] for x in converted_positions)
-    max_col = max(x[0] for x in converted_positions)
-    col_span = max_col - min_col + 1
-
-    logger.info(f"Min col: {min_col}, max col: {max_col}, col_span: {col_span}")
-
-    min_row = min(x[1] for x in converted_positions)
-    max_row = max(x[1] for x in converted_positions)
-    row_span = max_row - min_row + 1
-
-    logger.info(f"Min row: {min_row}, max row: {max_row}, row_span: {row_span}")
-
-    span = max(col_span, row_span)
-
-    radius = (win_size[0] - 2 * margin) / span / 2
-    sepradius = 1.1 * radius
-    inradius = math.sqrt(3) / 2 * sepradius
 
     pygame.init()
 
     # Set up the drawing window
     screen = pygame.display.set_mode(win_size)
+
+    content = open(os.path.join(test_path, "input"), "r").read()
+
+    tiles, _ = count_black_tiles(content)
+    modified_tiles = None
+
+    def recalculate_dimensions():
+        converted_positions = [cube_to_offset(x) for x in tiles.keys()]
+
+        min_col = min(x[0] for x in converted_positions)
+        max_col = max(x[0] for x in converted_positions)
+        col_span = max_col - min_col + 1
+
+        min_row = min(x[1] for x in converted_positions)
+        max_row = max(x[1] for x in converted_positions)
+        row_span = max_row - min_row + 1
+
+        span = max(col_span, row_span)
+
+        radius = (win_size[0] - 2 * margin) / span / 2
+        sepradius = 1.1 * radius
+        inradius = math.sqrt(3) / 2 * sepradius
+
+        return radius, sepradius, inradius
+
+    radius, sepradius, inradius = recalculate_dimensions()
+
+    pygame.time.set_timer(pygame.USEREVENT + 1, 200)
 
     # Run until the user asks to quit
     running = True
@@ -80,11 +94,12 @@ def render_tileset(tiles):
             if event.type == pygame.QUIT:
                 running = False
 
+            elif (event.type == pygame.KEYUP and event.key == pygame.K_SPACE) or event.type == pygame.USEREVENT + 1:
+                tiles, modified_tiles = step_tileset(tiles, modified_tiles)
+                radius, sepradius, inradius = recalculate_dimensions()
+
         # Fill the background with white
         screen.fill((255, 255, 255))
-
-        # Draw a solid blue circle in the center
-        # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
 
         for i, (tile_pos, tile_color) in enumerate(tiles.items()):
             tile_pos = list(cube_to_offset(tile_pos))
@@ -96,9 +111,6 @@ def render_tileset(tiles):
             tile_stroke = (0, 0, 0) if tile_color != TileColor.Black else (255, 255, 255)
             draw_hexagon(screen, tile_pos, tile_color, radius, 0.1 * radius, tile_stroke)
 
-            # if i == 2:
-            #     break
-
         # Flip the display
         pygame.display.flip()
 
@@ -107,14 +119,4 @@ def render_tileset(tiles):
 
 
 if __name__ == '__main__':
-    tileset = {
-        (0, 0, 0): TileColor.Black,
-        (1, -1, 0): TileColor.White,
-        (1, 0, -1): TileColor.Black,
-        (0, 1, -1): TileColor.White,
-        (-1, 1, 0): TileColor.Black,
-        (-1, 0, 1): TileColor.White,
-        (0, -1, 1): TileColor.Black
-    }
-
-    render_tileset(tileset)
+    render()
